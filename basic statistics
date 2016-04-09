@@ -1,0 +1,64 @@
+#find the average(mean) Fare
+mean(train$Fare)
+
+#using inbuild mode function 
+mode(train$Age)
+
+#using a simple method
+actual_mode <- table(train$Age)    #creates a table of all age groups
+actual_mode  
+
+#find the most frequent value using max
+names(actual_mode)[actual_mode == max(actual_mode)]
+
+#find out the median
+median(train$Fare)
+
+#calculate range
+range(train$Fare)
+
+#find boxplot
+boxplot(train$Age ~ train$Pclass, xlab = "Class", ylab = "Age", col = c("red"))
+
+#variance of fare
+var(train$Fare)
+
+#Standard Deviation of Fare
+sqrt(var(train$Fare))
+
+#create bar chart of Fare
+hist(train$Fare, main = "Fare Per Person", xlab = "Fare", col = "grey", breaks = 40, 
+     xlim = c(0,300))
+     
+#calculate z test
+#create a new data frame for upper class passengers
+new_data <- subset(train, train$Class1 == 1)
+#function for z test
+z.test2 = function(a, b, n){
+ sample_mean = mean(a)
+ pop_mean = mean(b)
+ c = nrow(n)
+ var_b = var(b)
+ zeta = (sample_mean - pop_mean) / (sqrt(var_b/c))
+ return(zeta)
+}
+
+#call function
+z.test2(new_data$Survived, train$Survived, new_data)
+
+#chi-square test between Survived, Sex, Pclass
+chisq.test(train$Survived, train$Sex)
+#another method of chi-square test
+summary(table(train$Survived,train$Pclass))
+
+#correlation
+plot(train$Fare, train$Age, xlab = 'Fare', ylab = 'Age')
+
+#pearson correlation test
+cor.test(train$Age, train$Fare, method = 'pearson')
+
+#Regression model
+fit <- glm(Survived ~ Age + Pclass + Sex + SibSp + Parch + Fare + Embarked + Cabin,                     
+data = train, family = binomial(link = 'logit'))
+summary(fit)
+
